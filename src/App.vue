@@ -3,7 +3,7 @@
 </script>
 
 <template>
- <div class="h-screen ">
+ <div class="h-screen bg-[#0B233F]">
   Game Header
   <div class="h-full flex justify-center items-center">
     <GameArena />
