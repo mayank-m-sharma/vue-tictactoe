@@ -71,3 +71,9 @@ export const TURN_VALUE = {
     PLAYER_1: 1,
     PLAYER_2: 2
 }
+
+export const PLAYERS = {
+    PLAYER_1: 'PLAYER_1',
+    PLAYER_2: 'PLAYER_2',
+
+}

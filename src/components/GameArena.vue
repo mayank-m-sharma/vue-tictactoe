@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-[#253952] rounded-[46px] shadow-lg">
+  <div class="flex flex-col bg-[#253952] rounded-[46px] customBoxShadow">
      <SingleTileRow 
         v-for="detail in gameDetails" 
         :key="detail.rowId" 
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {gameDetails, CELL_CONSTANT, TURN_VALUE} from '../constants/tile';
+import {gameDetails, CELL_CONSTANT, TURN_VALUE, PLAYERS} from '../constants/tile';
 import SingleTileRow from './SingleTileRow.vue';
 export default {
     name: "GameArena",
@@ -21,6 +21,7 @@ export default {
             crossImage: '/src/assets/closeIconBig.svg',
             circleImage: '/src/assets/circleIcon.svg',
             crossImageActive: '/src/assets/closeIconYellow.svg',
+            circleImageActive: '/src/assets/circleIconBigYellow.svg',
             currentTurn: TURN_VALUE.PLAYER_1,
             isGameOver: false,
             winner: null,
@@ -29,6 +30,11 @@ export default {
     },
     components: {
         SingleTileRow
+    },
+    computed: {
+        getWiningIcon() {
+            return this.winner === PLAYERS.PLAYER_1 ? this.crossImageActive : this.circleImageActive;
+        }
     },
     methods: {
         handleUpdateTile(tile) {
@@ -52,19 +58,19 @@ export default {
         checkWiningStatus() {
             this.gameDetails.forEach(row => {
                 if (this.isMatchingValuesInRow(row)) {
-                    console.log(`${this.winner} wins`)
                     this.isGameOver = true;
+                    this.markWiningRow(row);
                     return true;
                 }
             })
             for (let col = 0; col <= 2; col ++) {
                 if (this.isMatchingValuesInColumn(col)) {
-                    console.log(`${this.winner} wins`)
                     this.isGameOver = true;
+                    this.markWiningColumn(col);
                     return true;
                 }
             }
-            if (this.isLeftDigonalHasMatchingValues()) {
+            if (this.isDigonalHasMatchingValues()) {
                 console.log(`${this.winner} wins`)
                 this.isGameOver = true;
                 return true;
@@ -83,39 +89,34 @@ export default {
                 return false;
             }
             if (cellValue === CELL_CONSTANT.CROSS) {
-                this.winner = "PLAYER 1"
-                this.crossImage = "/src/assets/closeIconYellow.svg";
+                this.winner = PLAYERS.PLAYER_1
             } else {
-                this.winner = "PLAYER 2"
+                this.winner = PLAYERS.PLAYER_2
             }
             return true;
          },
-         isLeftDigonalHasMatchingValues() {
-            let cellValue = this.gameDetails[0].rowDetail[0].cellValue;
-            let middleCellValue = this.gameDetails[1].rowDetail[1].cellValue;
-            let lastCellValue = this.gameDetails[2].rowDetail[2].cellValue; 
-            let arr = [cellValue, middleCellValue, lastCellValue]
-            const leftDigonalMatchStatus = this.isDigonalHasMatchingValues(arr);
+         isDigonalHasMatchingValues() {
+            let digonal = this.getDigonalCells('left');
+            const leftDigonalMatchStatus = this.checkDigonal(digonal);
             if (leftDigonalMatchStatus) {
+                this.markWiningDigonal('left');
                 return true;
             } 
-            cellValue = this.gameDetails[0].rowDetail[2].cellValue;
-            middleCellValue = this.gameDetails[1].rowDetail[1].cellValue;
-            lastCellValue = this.gameDetails[2].rowDetail[0].cellValue; 
-            arr = [cellValue, middleCellValue, lastCellValue]
-            const rightDigonalMatchStatus = this.isDigonalHasMatchingValues(arr);
+            digonal = this.getDigonalCells('right');
+            const rightDigonalMatchStatus = this.checkDigonal(digonal);
             if (rightDigonalMatchStatus) {
+                this.markWiningDigonal('right');
                 return true;
             } 
          },
-         isDigonalHasMatchingValues(arr) {
+         checkDigonal(arr) {
             if (arr[0] === null || arr[1] === null || arr[2] === null) {
                 return false;
             } else if (arr[0] === arr[1] && arr[1] === arr[2]) {
                 if (arr[0] === CELL_CONSTANT.CROSS) {
-                this.winner = "PLAYER 1"
+                    this.winner = PLAYERS.PLAYER_1;
                 } else {
-                    this.winner = "PLAYER 2"
+                     this.winner = PLAYERS.PLAYER_2;
                 }
                 return true;
             } 
@@ -132,18 +133,56 @@ export default {
                         return false;
                     }
                 else if (row === 2) {
-                    console.log('win')
                     if (firstColumnValue === CELL_CONSTANT.CROSS) {
-                        this.winner = "PLAYER 1"
+                        this.winner = PLAYERS.PLAYER_1
                     } else {
-                        this.winner = "PLAYER 2"
+                        this.winner = PLAYERS.PLAYER_2
                     }
-                    console.log(`${this.winner} wins`)
-                    this.isGameOver = true;
                     return true;
                 }
             }
+        },
+        markWiningRow(row) {
+            row.rowDetail.forEach(cell => {
+                cell.iconSrc = this.getWiningIcon;
+            })
+        },
+        markWiningColumn(col) {;
+            for (let row = 0; row <= 2; row++) {
+                this.gameDetails[row].rowDetail[col].iconSrc = this.getWiningIcon;
+            }
+        },
+        markWiningDigonal(direction) {
+            if (direction === 'left') {
+                this.gameDetails[0].rowDetail[0].iconSrc = this.getWiningIcon;
+                this.gameDetails[1].rowDetail[1].iconSrc = this.getWiningIcon;
+                this.gameDetails[2].rowDetail[2].iconSrc = this.getWiningIcon;
+            } else {
+                this.gameDetails[0].rowDetail[2].iconSrc = this.getWiningIcon;
+                this.gameDetails[1].rowDetail[1].iconSrc = this.getWiningIcon;
+                this.gameDetails[2].rowDetail[0].iconSrc = this.getWiningIcon;
+            }
+        },
+        getDigonalCells(direction) {
+            const digonal = [];
+            if (direction === 'left') {
+                digonal.push(this.gameDetails[0].rowDetail[0].cellValue);
+                digonal.push(this.gameDetails[1].rowDetail[1].cellValue);
+                digonal.push(this.gameDetails[2].rowDetail[2].cellValue);
+            } else {
+                digonal.push(this.gameDetails[0].rowDetail[2].cellValue);
+                digonal.push(this.gameDetails[1].rowDetail[1].cellValue);
+                digonal.push(this.gameDetails[2].rowDetail[0].cellValue);
+            }
+            return digonal;
         }
     }
 }
 </script>
+<style scoped>
+.customBoxShadow {
+    box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
+    -moz-box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
+}
+</style>
