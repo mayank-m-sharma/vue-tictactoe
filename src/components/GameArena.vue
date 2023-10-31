@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col">
     <p>Current player - {{ currentTurn }}</p>
+    <p>player 1 - x</p>
+    <p>player 2 - o</p>
      <SingleTileRow 
         v-for="detail in gameDetails" 
         :key="detail.rowId" 
@@ -22,7 +24,8 @@ export default {
             crossImage: '/src/assets/crossIcon.svg',
             circleImage: '/src/assets/circleIcon.svg',
             currentTurn: TURN_VALUE.PLAYER_1,
-
+            isGameOver: false,
+            winner: null
         }
     },
     components: {
@@ -30,7 +33,8 @@ export default {
     },
     methods: {
         handleUpdateTile(tile) {
-            if (this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc !== '') {
+            console.log(tile)
+            if (this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc !== '' || this.isGameOver) {
                 return;
             }
             if (this.currentTurn === TURN_VALUE.PLAYER_1) {
@@ -42,7 +46,46 @@ export default {
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CIRCLE;
                 this.currentTurn = TURN_VALUE.PLAYER_1
             }
-        }
+            const winingStatus = this.checkWiningStatus();
+        },
+        checkWiningStatus() {
+            this.gameDetails.forEach(row => {
+                if (this.isMatchingValuesInRow(row)) {
+                    console.log(`${this.winner} wins`)
+                    this.isGameOver = true;
+                    return true;
+                }
+            })
+            // for (let row = 0; row <= 2; row++) {
+            //     if (this.isMatchingValuesInColumn(row)) {
+            //         console.log(`${this.winner} wins`)
+            //         this.isGameOver = true;
+            //         return true;
+            //     }
+            // }
+            // if (this.isLeftDigonalHasMatchingValues() || this.isRightDigonalHasMatchingValues()) {
+            //     return true;
+            // }
+            return false;
+        },
+        isMatchingValuesInRow({rowDetail}) {
+            const cellValue = rowDetail[0].cellValue;
+            if (cellValue !== null) {
+                for (let row = 1; row <=2; row++) {
+                    if (rowDetail[row].cellValue !== cellValue) {
+                        return false
+                    }
+                }
+            } else {
+                return false;
+            }
+            if (cellValue === CELL_CONSTANT.CROSS) {
+                this.winner = "PLAYER 1"
+            } else {
+                this.winner = "PLAYER 2"
+            }
+            return true;
+         },
     }
 }
 </script>
