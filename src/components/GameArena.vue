@@ -55,13 +55,13 @@ export default {
                     return true;
                 }
             })
-            // for (let row = 0; row <= 2; row++) {
-            //     if (this.isMatchingValuesInColumn(row)) {
-            //         console.log(`${this.winner} wins`)
-            //         this.isGameOver = true;
-            //         return true;
-            //     }
-            // }
+            for (let col = 0; col <= 2; col ++) {
+                if (this.isMatchingValuesInColumn(col)) {
+                    console.log(`${this.winner} wins`)
+                    this.isGameOver = true;
+                    return true;
+                }
+            }
             if (this.isLeftDigonalHasMatchingValues()) {
                 console.log(`${this.winner} wins`)
                 this.isGameOver = true;
@@ -116,7 +116,31 @@ export default {
                 }
                 return true;
             } 
-         }
+        },
+        isMatchingValuesInColumn(col) {
+            let firstColumnValue = this.gameDetails[0].rowDetail[col].cellValue;
+            if (firstColumnValue === null ) {
+                return false;
+            }
+            let row = 0;
+            firstColumnValue = this.gameDetails[0].rowDetail[col].cellValue;
+                for (row = 1; row <= 2; row++) {
+                    if (this.gameDetails[row].rowDetail[col].cellValue === null || firstColumnValue !== this.gameDetails[row].rowDetail[col].cellValue) {
+                        return false;
+                    }
+                else if (row === 2) {
+                    console.log('win')
+                    if (firstColumnValue === CELL_CONSTANT.CROSS) {
+                        this.winner = "PLAYER 1"
+                    } else {
+                        this.winner = "PLAYER 2"
+                    }
+                    console.log(`${this.winner} wins`)
+                    this.isGameOver = true;
+                    return true;
+                }
+            }
+        }
     }
 }
 </script>
