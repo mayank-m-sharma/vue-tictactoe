@@ -25,7 +25,8 @@ export default {
             circleImage: '/src/assets/circleIcon.svg',
             currentTurn: TURN_VALUE.PLAYER_1,
             isGameOver: false,
-            winner: null
+            winner: null,
+            movesSoFar: 0
         }
     },
     components: {
@@ -45,7 +46,10 @@ export default {
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CIRCLE;
                 this.currentTurn = TURN_VALUE.PLAYER_1
             }
-            const winingStatus = this.checkWiningStatus();
+            this.movesSoFar++;
+            if (this.movesSoFar >= 5) {
+                const winingStatus = this.checkWiningStatus();
+            }
         },
         checkWiningStatus() {
             this.gameDetails.forEach(row => {
