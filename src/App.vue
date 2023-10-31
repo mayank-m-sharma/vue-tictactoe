@@ -3,5 +3,10 @@
 </script>
 
 <template>
-  <GameArena />
+ <div class="h-screen ">
+  Game Header
+  <div class="h-full flex justify-center items-center">
+    <GameArena />
+  </div>
+ </div>
 </template>
