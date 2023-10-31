@@ -33,7 +33,6 @@ export default {
     },
     methods: {
         handleUpdateTile(tile) {
-            console.log(tile)
             if (this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc !== '' || this.isGameOver) {
                 return;
             }
@@ -63,9 +62,11 @@ export default {
             //         return true;
             //     }
             // }
-            // if (this.isLeftDigonalHasMatchingValues() || this.isRightDigonalHasMatchingValues()) {
-            //     return true;
-            // }
+            if (this.isLeftDigonalHasMatchingValues()) {
+                console.log(`${this.winner} wins`)
+                this.isGameOver = true;
+                return true;
+            }
             return false;
         },
         isMatchingValuesInRow({rowDetail}) {
@@ -86,6 +87,36 @@ export default {
             }
             return true;
          },
+         isLeftDigonalHasMatchingValues() {
+            let cellValue = this.gameDetails[0].rowDetail[0].cellValue;
+            let middleCellValue = this.gameDetails[1].rowDetail[1].cellValue;
+            let lastCellValue = this.gameDetails[2].rowDetail[2].cellValue; 
+            let arr = [cellValue, middleCellValue, lastCellValue]
+            const leftDigonalMatchStatus = this.isDigonalHasMatchingValues(arr);
+            if (leftDigonalMatchStatus) {
+                return true;
+            } 
+            cellValue = this.gameDetails[0].rowDetail[2].cellValue;
+            middleCellValue = this.gameDetails[1].rowDetail[1].cellValue;
+            lastCellValue = this.gameDetails[2].rowDetail[0].cellValue; 
+            arr = [cellValue, middleCellValue, lastCellValue]
+            const rightDigonalMatchStatus = this.isDigonalHasMatchingValues(arr);
+            if (rightDigonalMatchStatus) {
+                return true;
+            } 
+         },
+         isDigonalHasMatchingValues(arr) {
+            if (arr[0] === null || arr[1] === null || arr[2] === null) {
+                return false;
+            } else if (arr[0] === arr[1] && arr[1] === arr[2]) {
+                if (arr[0] === CELL_CONSTANT.CROSS) {
+                this.winner = "PLAYER 1"
+                } else {
+                    this.winner = "PLAYER 2"
+                }
+                return true;
+            } 
+         }
     }
 }
 </script>
