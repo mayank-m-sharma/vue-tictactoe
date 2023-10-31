@@ -1,8 +1,5 @@
 <template>
-  <div class="flex flex-col">
-    <p>Current player - {{ currentTurn }}</p>
-    <p>player 1 - x</p>
-    <p>player 2 - o</p>
+  <div class="flex flex-col bg-[#253952] rounded-[46px] shadow-lg">
      <SingleTileRow 
         v-for="detail in gameDetails" 
         :key="detail.rowId" 
@@ -21,8 +18,9 @@ export default {
     data() {
         return {
             gameDetails,
-            crossImage: '/src/assets/crossIcon.svg',
+            crossImage: '/src/assets/closeIconBig.svg',
             circleImage: '/src/assets/circleIcon.svg',
+            crossImageActive: '/src/assets/closeIconYellow.svg',
             currentTurn: TURN_VALUE.PLAYER_1,
             isGameOver: false,
             winner: null,
@@ -86,6 +84,7 @@ export default {
             }
             if (cellValue === CELL_CONSTANT.CROSS) {
                 this.winner = "PLAYER 1"
+                this.crossImage = "/src/assets/closeIconYellow.svg";
             } else {
                 this.winner = "PLAYER 2"
             }

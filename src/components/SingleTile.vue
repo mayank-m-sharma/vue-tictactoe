@@ -1,5 +1,8 @@
 <template>
-    <div class="border border-dashed border-gray-100 h-28 w-28 cursor-pointer" @click="handleClick(tileDetail.id)">
+    <div 
+        class="h-[146px] w-[146px] cursor-pointer flex items-center justify-center" 
+        @click="handleClick(tileDetail.id)
+    ">
         <img :src="tileDetail.iconSrc" alt="">
     </div>
 </template>
