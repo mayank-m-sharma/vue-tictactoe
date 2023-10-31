@@ -1,42 +1,73 @@
-export const row1 = [
+
+export const gameDetails = [
     {
-        id: 0,
-        icon: "",
+        rowId: 0,
+        rowDetail: [
+            {
+                id: 0,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 1,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 2,
+                iconSrc: "",
+                cellValue: null
+            },
+        ]
     },
     {
-        id: 1,
-        icon: "",
+        rowId: 1,
+        rowDetail: [
+            {
+                id: 0,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 1,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 2,
+                iconSrc: "",
+                cellValue: null
+            },
+        ]
     },
     {
-        id: 2,
-        icon: "",
-    },
-];
-export const row2 = [
-    {
-        id: 0,
-        icon: "",
-    },
-    {
-        id: 1,
-        icon: "",
-    },
-    {
-        id: 2,
-        icon: "",
-    },
-];
-export const row3 = [
-    {
-        id: 0,
-        icon: "",
-    },
-    {
-        id: 1,
-        icon: "",
-    },
-    {
-        id: 2,
-        icon: "",
-    },
-];
+        rowId: 2,
+        rowDetail: [
+            {
+                id: 0,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 1,
+                iconSrc: "",
+                cellValue: null
+            },
+            {
+                id: 2,
+                iconSrc: "",
+                cellValue: null
+            },
+        ]
+    }
+]
+
+export const CELL_CONSTANT = {
+    CROSS: 0,
+    CIRCLE: 1
+}
+
+export const TURN_VALUE = {
+    PLAYER_1: 1,
+    PLAYER_2: 2
+}
