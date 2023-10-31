@@ -22,10 +22,16 @@ export default {
             circleImage: '/src/assets/circleIcon.svg',
             crossImageActive: '/src/assets/closeIconYellow.svg',
             circleImageActive: '/src/assets/circleIconBigYellow.svg',
-            currentTurn: TURN_VALUE.PLAYER_1,
             isGameOver: false,
             winner: null,
             movesSoFar: 0
+        }
+    },
+    props: {
+        currentTurn: {
+            type: Number,
+            default: TURN_VALUE.PLAYER_1
+
         }
     },
     components: {
@@ -44,11 +50,11 @@ export default {
             if (this.currentTurn === TURN_VALUE.PLAYER_1) {
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc = this.crossImage;
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CROSS;
-                this.currentTurn = TURN_VALUE.PLAYER_2
+                this.$emit('updateCurrentTurn', TURN_VALUE.PLAYER_2)
             } else {
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc = this.circleImage;
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CIRCLE;
-                this.currentTurn = TURN_VALUE.PLAYER_1
+                this.$emit('updateCurrentTurn', TURN_VALUE.PLAYER_1)
             }
             this.movesSoFar++;
             if (this.movesSoFar >= 5) {
