@@ -23,10 +23,10 @@ export default {
     data() {
         return {
             gameDetails: cloneDeep(initialBoard),
-            crossImage: '/src/assets/closeIconBig.svg',
-            circleImage: '/src/assets/circleIcon.svg',
-            crossImageActive: '/src/assets/closeIconYellow.svg',
-            circleImageActive: '/src/assets/circleIconBigYellow.svg',
+            crossImage: '/closeIconBig.svg',
+            circleImage: '/circleIcon.svg',
+            crossImageActive: '/closeIconYellow.svg',
+            circleImageActive: '/circleIconBigYellow.svg',
             isGameOver: false,
             winner: null,
             movesSoFar: 0
@@ -70,7 +70,6 @@ export default {
                         result: "WIN",
                         winner: this.winner,
                     }
-                    console.log('reaching here')
                     const audio = new Audio(winSound);
                     audio.volume = 0.069
                     audio.play();
