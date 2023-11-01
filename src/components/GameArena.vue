@@ -11,13 +11,14 @@
 </template>
 
 <script>
-import {gameDetails, CELL_CONSTANT, TURN_VALUE, PLAYERS} from '../constants/tile';
+import cloneDeep from 'lodash/cloneDeep'
+import {initialBoard, CELL_CONSTANT, TURN_VALUE, PLAYERS} from '../constants/tile';
 import SingleTileRow from './SingleTileRow.vue';
 export default {
     name: "GameArena",
     data() {
         return {
-            gameDetails,
+            gameDetails: cloneDeep(initialBoard),
             crossImage: '/src/assets/closeIconBig.svg',
             circleImage: '/src/assets/circleIcon.svg',
             crossImageActive: '/src/assets/closeIconYellow.svg',
@@ -63,6 +64,7 @@ export default {
                         result: "WIN",
                         winner: this.winner,
                     }
+                    this.resetGame();
                     this.$emit('updateMatchDetails', matchDetails)
                 }
             }
@@ -70,6 +72,7 @@ export default {
                 const matchDetails = {
                         result: "DRAW",
                     }
+                this.resetGame();
                 this.$emit('updateMatchDetails', matchDetails)
             }
         },
@@ -196,6 +199,14 @@ export default {
                 digonal.push(this.gameDetails[2].rowDetail[0].cellValue);
             }
             return digonal;
+        },
+        resetGame() {
+            setTimeout(() => {
+                this.gameDetails = cloneDeep(initialBoard);
+                this.isGameOver = false;
+                this.winner = null;
+                this.movesSoFar = 0;
+            }, 3300)
         }
     }
 }

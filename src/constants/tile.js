@@ -1,5 +1,5 @@
 
-export const gameDetails = [
+export const initialBoard = [
     {
         rowId: 0,
         rowDetail: [

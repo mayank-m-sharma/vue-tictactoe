@@ -14,7 +14,8 @@
       <div class="p-5 box rounded-[46px]">
         <GameArena 
           v-if="players.length" 
-          class="h-[440px] w-[440px] child" 
+          class="h-[440px] w-[440px]"
+          :key="matchNumber"
           :currentTurn="currentTurn" 
           @updateCurrentTurn="handleUpdateCurrentTurn($event)" 
           @updateMatchDetails="handleUpdateMatchDetails($event)"
@@ -28,6 +29,7 @@
         :player-info="players[1]" 
       />
     </div>
+    <p v-if="showNewMatchTimer" class="absolute bottom-5 text-white text-2xl font-bold">starting new match in ... {{ newMatchTimer }} </p>
   </div>
  </div>
 </template>
@@ -46,7 +48,10 @@ export default {
       currentTurn: TURN_VALUE.PLAYER_1,
       players: [],
       matchStatus: MATCH_STATUS.ONGOING,
-      winner: ""
+      winner: "",
+      newMatchTimer: 4,
+      showNewMatchTimer: false,
+      matchNumber: 0
     }
   },
   methods: {
@@ -83,6 +88,7 @@ export default {
     handleUpdateMatchDetails(matchDetails) {
       if (matchDetails.result === MATCH_STATUS.WIN) {
         this.matchStatus = MATCH_STATUS.WIN;
+        this.startNewMatch();
         switch(matchDetails.winner) {
           case PLAYERS.PLAYER_1: 
             this.players[0].score++;
@@ -97,7 +103,27 @@ export default {
         }
       } else if (matchDetails.result === MATCH_STATUS.DRAW) {
           this.matchStatus = MATCH_STATUS.DRAW;
+          this.startNewMatch();
       }
+    },
+    startNewMatch() {
+      this.showNewMatchTimer = true;
+      const timer = setInterval(() => {
+        if (this.newMatchTimer === 1) {
+          clearInterval(timer);
+          this.resetGame();
+        }
+        this.newMatchTimer--;
+      }, 1000)
+    },
+    resetGame() {
+      this.showNewMatchTimer = false;
+      this.newMatchTimer = 4;
+      this.winner = ""
+      this.matchStatus = MATCH_STATUS.ONGOING
+      this.players.forEach(player => {
+        player.hasWon = false;
+      })
     }
   }
 }
