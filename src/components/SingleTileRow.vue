@@ -1,10 +1,10 @@
 <template>
-  <div class="flex">
+  <div class="flex items-center relative border-b border-dashed border-[#F5F5F5] opacity-[1] last:border-b-0">
       <SingleTile 
-        v-for="tile in rowDetail" 
-        :key="tile.id" 
+        v-for="(tile) in rowDetail" 
+        :key="tile.id"
+        class="border-l border-[#F5F5F5] border-dashed first:border-l-0"
         :tileDetail="tile" 
-        class="border border-gray-200"
         @updateTile="handleUpdateTile($event)"
       />
   </div>
