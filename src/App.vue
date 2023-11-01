@@ -8,6 +8,7 @@
       <PlayerInfoTab  
         v-if="players.length"
         :isCurrentPlayerTurn="checkIfCurrentPlayerTurn(TURN_VALUE.PLAYER_1)"
+        :hasMatchDrew="matchStatus === 'DRAW'"
         :player-info="players[0]" 
       />
       <div class="p-5 box rounded-[46px]">
@@ -23,6 +24,7 @@
       <PlayerInfoTab 
         v-if="players.length"
         :isCurrentPlayerTurn="checkIfCurrentPlayerTurn(TURN_VALUE.PLAYER_2)"
+        :hasMatchDrew="matchStatus === 'DRAW'"
         :player-info="players[1]" 
       />
     </div>
@@ -57,6 +59,8 @@ export default {
             return this.currentTurn === playerId;
           case MATCH_STATUS.WIN: 
             return this.currentTurn === TURN_VALUE[this.winner];
+          case MATCH_STATUS.DRAW: 
+            return true;
         }
     },
     updatePlayersList([player_1, player_2]) {
@@ -91,6 +95,8 @@ export default {
             this.winner = PLAYERS.PLAYER_2;
             break;
         }
+      } else if (matchDetails.result === MATCH_STATUS.DRAW) {
+          this.matchStatus = MATCH_STATUS.DRAW;
       }
     }
   }

@@ -66,6 +66,12 @@ export default {
                     this.$emit('updateMatchDetails', matchDetails)
                 }
             }
+            if (this.movesSoFar === 9 && !this.isGameOver) {
+                const matchDetails = {
+                        result: "DRAW",
+                    }
+                this.$emit('updateMatchDetails', matchDetails)
+            }
         },
         checkWiningStatus() {
             let winingStatus = false;
