@@ -1,7 +1,7 @@
 <template>
  <div class="h-screen overflow-hidden">
   <div class="absolute top-[42px] left-[68.11px]">
-    <img src="/src/assets/TicTacToe.svg" class="w-[42px] h-[58px]" alt="">
+    <img src="/TicTacToe.svg" class="w-[42px] h-[58px]" alt="">
   </div>
   <div class="h-full w-full flex justify-center items-center rounded-[46px]">
     <div class="flex justify-around items-center w-full">
@@ -79,14 +79,14 @@ export default {
         const player_1_details = {
           playerName: player_1,
           playerNumber: "PLAYER 1",
-          playerIcon: "/src/assets/closeIconSmall.svg",
+          playerIcon: "/closeIconSmall.svg",
           score: 0,
           hasWon: false
         }
         const player_2_details = {
           playerName: player_2,
           playerNumber: "PLAYER 2",
-          playerIcon: "/src/assets/circleIconSmall.svg",
+          playerIcon: "/circleIconSmall.svg",
           score: 0,
           hasWon: false
         }
@@ -139,7 +139,6 @@ export default {
     checkGameCompletionStatus() {
       const player_1 = this.players[0];
       const player_2 = this.players[1];
-      console.log('players-', player_1, player_2)
       if (player_1.score === 6) {
         this.finalWinner = this.players[0];
         this.isGameOver = true;
