@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-[#253952] rounded-[46px] customBoxShadow">
+  <div class="primary-wrapper">
      <SingleTileRow 
         v-for="detail in gameDetails" 
         :key="detail.rowId" 
@@ -185,10 +185,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.customBoxShadow {
-    box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
-    -moz-box-shadow: 3px 8px 17px 0px rgba(0,0,0,0.76);
-}
-</style>

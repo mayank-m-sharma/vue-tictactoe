@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col space-y-[25px] items-center">
-    <p v-if="isCurrentPlayerTurn" :class="getTabInfoClass">
+    <p :class="getTabInfoClass">
         {{ getTabInfoText }}
     </p>
     <div class="w-[123px] h-full bg-[#253952] rounded-3xl flex flex-col items-center space-y-2 px-6 py-5">
@@ -35,7 +35,11 @@ export default {
             return "Your Turn";
         },
         getTabInfoClass() {
-            return "text-[#FB9E01] text-[21px] font-medium"
+            let infoClass = "text-[#FB9E01] text-[21px] font-medium";
+            if (!this.isCurrentPlayerTurn) {
+                infoClass += ` opacity-0`
+            }
+            return infoClass;
         }
     }
 }
