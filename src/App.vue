@@ -30,7 +30,7 @@
         :player-info="players[1]" 
       />
     </div>
-    <p v-if="showNewMatchTimer" class="absolute bottom-5 text-white text-2xl font-bold">starting new match in ... {{ newMatchTimer }} </p>
+    <p v-if="showNewMatchTimer" class="absolute bottom-5 text-white text-2xl font-bold animate__animated animate__fadeIn animate__infinite">starting new match in ... {{ newMatchTimer }} </p>
   </div>
  </div>
 </template>
