@@ -1,18 +1,32 @@
 <template>
-  <div class="flex flex-col space-y-[25px] items-center">
-    <p :class="getTabInfoClass">
-        {{ getTabInfoText }}
-    </p>
-    <div class="w-[123px] h-full bg-[#253952] rounded-3xl flex flex-col items-center space-y-2 px-6 py-5" :class="getHighlightBorderClass">
-        <div class="flex flex-col space-y-3 items-center justify-center">
-            <p class="text-[#FB9E01] text-[13px]">
-                {{ playerInfo.playerNumber }}
-            </p>
-            <p class="text-white text-center line-clamp-1 text-[18px] font-medium">
-                {{ playerInfo.playerName }}
-            </p>
+  <div class="flex flex-col space-y-[15px] items-center">
+    <div class="flex flex-col space-y-[25px] items-center">
+        <p :class="getTabInfoClass">
+            {{ getTabInfoText }}
+        </p>
+        <div class="w-[123px] h-full bg-[#253952] rounded-3xl flex flex-col items-center space-y-2 px-6 py-5" :class="getHighlightBorderClass">
+            <div class="flex flex-col space-y-3 items-center justify-center">
+                <p class="text-[#FB9E01] text-[13px]">
+                    {{ playerInfo.playerNumber }}
+                </p>
+                <p class="text-white text-center line-clamp-1 text-[18px] font-medium">
+                    {{ playerInfo.playerName }}
+                </p>
+            </div>
+            <img class="h-[43px] w-[43px]" :src="playerInfo.playerIcon" alt="">
         </div>
-        <img class="h-[43px] w-[43px]" :src="playerInfo.playerIcon" alt="">
+    </div>
+    <div class="flex space-x-3 items-center">
+        <div 
+            v-for="(score, index) in playerInfo.score"
+            :key="index"
+            class="h-2.5 w-2.5 rounded-full bg-white" 
+        />
+        <div 
+            v-for="(match, index) in remainingMatches"
+            :key="index"
+            class="h-2.5 w-2.5 rounded-full bg-white opacity-[0.05]" 
+        />
     </div>
   </div>
 </template>
@@ -20,6 +34,11 @@
 <script>
 export default {
     name: "PlayerInfoTab",
+    data() {
+        return {
+            totalRounds: 6
+        }
+    },
     props: {
         playerInfo: {
             type: Object,
@@ -55,6 +74,9 @@ export default {
             if (this.playerInfo.hasWon || this.hasMatchDrew) {
                 return 'border-[3px] border-[#FB9E01]'
             }
+        },
+        remainingMatches() {
+            return this.totalRounds - this.playerInfo.score;
         }
     }
 }
