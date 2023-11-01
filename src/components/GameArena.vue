@@ -31,7 +31,6 @@ export default {
         currentTurn: {
             type: Number,
             default: TURN_VALUE.PLAYER_1
-
         }
     },
     components: {
@@ -59,13 +58,22 @@ export default {
             this.movesSoFar++;
             if (this.movesSoFar >= 5) {
                 const winingStatus = this.checkWiningStatus();
+                if (winingStatus) {
+                    const matchDetails = {
+                        result: "WIN",
+                        winner: this.winner,
+                    }
+                    this.$emit('updateMatchDetails', matchDetails)
+                }
             }
         },
         checkWiningStatus() {
+            let winingStatus = false;
             this.gameDetails.forEach(row => {
                 if (this.isMatchingValuesInRow(row)) {
                     this.isGameOver = true;
                     this.markWiningRow(row);
+                    winingStatus = true;
                     return true;
                 }
             })
@@ -73,15 +81,16 @@ export default {
                 if (this.isMatchingValuesInColumn(col)) {
                     this.isGameOver = true;
                     this.markWiningColumn(col);
+                    winingStatus = true;
                     return true;
                 }
             }
             if (this.isDigonalHasMatchingValues()) {
-                console.log(`${this.winner} wins`)
                 this.isGameOver = true;
+                winingStatus = true;
                 return true;
             }
-            return false;
+            return winingStatus;
         },
         isMatchingValuesInRow({rowDetail}) {
             const cellValue = rowDetail[0].cellValue;

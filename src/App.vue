@@ -11,7 +11,13 @@
         :player-info="players[0]" 
       />
       <div class="p-5 box rounded-[46px]">
-        <GameArena v-if="players.length" class="h-[440px] w-[440px] child" :currentTurn="currentTurn" @updateCurrentTurn="handleUpdateCurrentTurn($event)" />
+        <GameArena 
+          v-if="players.length" 
+          class="h-[440px] w-[440px] child" 
+          :currentTurn="currentTurn" 
+          @updateCurrentTurn="handleUpdateCurrentTurn($event)" 
+          @updateMatchDetails="handleUpdateMatchDetails($event)"
+        />
         <PlayersInfoForm v-if="!players.length" class="h-[440px] w-[440px]" @updatePlayersList="updatePlayersList($event)" />
       </div>
       <PlayerInfoTab 
@@ -27,7 +33,7 @@
 <script>
 import GameArena from './components/GameArena.vue';
 import PlayerInfoTab from './components/PlayerInfoTab.vue'
-import {TURN_VALUE} from './constants/tile';
+import {TURN_VALUE, MATCH_STATUS, PLAYERS} from './constants/tile';
 import PlayersInfoForm from './components/PlayersInfoForm.vue';
 export default {
   name: "App",
@@ -36,7 +42,9 @@ export default {
     return {
       TURN_VALUE,
       currentTurn: TURN_VALUE.PLAYER_1,
-      players: []
+      players: [],
+      matchStatus: MATCH_STATUS.ONGOING,
+      winner: ""
     }
   },
   methods: {
@@ -44,20 +52,46 @@ export default {
       this.currentTurn = turn
     },
     checkIfCurrentPlayerTurn(playerId) {
-      return this.currentTurn === playerId; 
+        switch(this.matchStatus) {
+          case MATCH_STATUS.ONGOING: 
+            return this.currentTurn === playerId;
+          case MATCH_STATUS.WIN: 
+            return this.currentTurn === TURN_VALUE[this.winner];
+        }
     },
     updatePlayersList([player_1, player_2]) {
         const player_1_details = {
           playerName: player_1,
           playerNumber: "PLAYER 1",
-          playerIcon: "/src/assets/closeIconSmall.svg"
+          playerIcon: "/src/assets/closeIconSmall.svg",
+          score: 0,
+          hasWon: false
         }
         const player_2_details = {
           playerName: player_2,
           playerNumber: "PLAYER 2",
-          playerIcon: "/src/assets/circleIconSmall.svg"
+          playerIcon: "/src/assets/circleIconSmall.svg",
+          score: 0,
+          hasWon: false
         }
         this.players = [player_1_details, player_2_details]
+    },
+    handleUpdateMatchDetails(matchDetails) {
+      if (matchDetails.result === MATCH_STATUS.WIN) {
+        this.matchStatus = MATCH_STATUS.WIN;
+        switch(matchDetails.winner) {
+          case PLAYERS.PLAYER_1: 
+            this.players[0].score++;
+            this.players[0].hasWon = true;
+            this.winner = PLAYERS.PLAYER_1;
+            break;
+          case PLAYERS.PLAYER_2:
+            this.players[1].score++;
+            this.players[1].hasWon = true;
+            this.winner = PLAYERS.PLAYER_2;
+            break;
+        }
+      }
     }
   }
 }
