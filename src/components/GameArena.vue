@@ -14,6 +14,10 @@
 import cloneDeep from 'lodash/cloneDeep'
 import {initialBoard, CELL_CONSTANT, TURN_VALUE, PLAYERS} from '../constants/tile';
 import SingleTileRow from './SingleTileRow.vue';
+import crossClickSound from '../assets/effect_tick.mp3'
+import circleClickSound from '../assets/click_sound.mp3'
+import winSound from '../assets/next_level.mp3'
+import drawSound from '../assets/draw-sound.mp3'
 export default {
     name: "GameArena",
     data() {
@@ -48,10 +52,12 @@ export default {
                 return;
             }
             if (this.currentTurn === TURN_VALUE.PLAYER_1) {
+                new Audio(crossClickSound).play()
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc = this.crossImage;
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CROSS;
                 this.$emit('updateCurrentTurn', TURN_VALUE.PLAYER_2)
             } else {
+                new Audio(circleClickSound).play()
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].iconSrc = this.circleImage;
                 this.gameDetails[tile.rowId].rowDetail[tile.tileId].cellValue = CELL_CONSTANT.CIRCLE;
                 this.$emit('updateCurrentTurn', TURN_VALUE.PLAYER_1)
@@ -64,6 +70,10 @@ export default {
                         result: "WIN",
                         winner: this.winner,
                     }
+                    console.log('reaching here')
+                    const audio = new Audio(winSound);
+                    audio.volume = 0.069
+                    audio.play();
                     this.resetGame();
                     this.$emit('updateMatchDetails', matchDetails)
                 }
@@ -72,6 +82,7 @@ export default {
                 const matchDetails = {
                         result: "DRAW",
                     }
+                new Audio(drawSound).play();    
                 this.resetGame();
                 this.$emit('updateMatchDetails', matchDetails)
             }

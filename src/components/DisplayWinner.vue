@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import audioClip from '../assets/mario_flag_win.mp3'
 import PlayerInfoTab from './PlayerInfoTab.vue'
 export default {
     name: "DisplayWinner",
@@ -19,6 +20,11 @@ export default {
             type: Object,
             default: () => {}
         }
+    },
+    mounted() {
+        const audio = new Audio(audioClip);
+        audio.volume = 0.12;
+        audio.play();
     }
 }
 </script>
