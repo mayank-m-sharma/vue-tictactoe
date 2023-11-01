@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col space-y-[15px] items-center">
     <div class="flex flex-col space-y-[25px] items-center">
-        <p :class="getTabInfoClass">
+        <p v-if="showWiningStats" :class="getTabInfoClass">
             {{ getTabInfoText }}
         </p>
         <div class="w-[123px] h-full bg-[#253952] rounded-3xl flex flex-col items-center space-y-2 px-6 py-5" :class="getHighlightBorderClass">
@@ -16,7 +16,7 @@
             <img class="h-[43px] w-[43px]" :src="playerInfo.playerIcon" alt="">
         </div>
     </div>
-    <div class="flex space-x-3 items-center">
+    <div v-if="showWiningStats" class="flex space-x-3 items-center">
         <div 
             v-for="(score, index) in playerInfo.score"
             :key="index"
@@ -51,7 +51,11 @@ export default {
         hasMatchDrew: {
             type: Boolean,
             default: false
-        }
+        },
+        showWiningStats: {
+            type: Boolean,
+            default: true
+        },
     },
     computed: {
         getTabInfoText() {

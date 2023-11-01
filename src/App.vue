@@ -6,14 +6,15 @@
   <div class="h-full w-full flex justify-center items-center rounded-[46px]">
     <div class="flex justify-around items-center w-full">
       <PlayerInfoTab  
-        v-if="players.length"
+        v-if="players.length && !isGameOver"
         :isCurrentPlayerTurn="checkIfCurrentPlayerTurn(TURN_VALUE.PLAYER_1)"
         :hasMatchDrew="matchStatus === 'DRAW'"
         :player-info="players[0]" 
       />
       <div class="p-5 box rounded-[46px]">
+        <DisplayWinner v-if="isGameOver" class="h-[440px] w-[440px]" :playerDetail="finalWinner" />
         <GameArena 
-          v-if="players.length" 
+          v-if="players.length && !isGameOver" 
           class="h-[440px] w-[440px]"
           :key="matchNumber"
           :currentTurn="currentTurn" 
@@ -23,7 +24,7 @@
         <PlayersInfoForm v-if="!players.length" class="h-[440px] w-[440px]" @updatePlayersList="updatePlayersList($event)" />
       </div>
       <PlayerInfoTab 
-        v-if="players.length"
+        v-if="players.length && !isGameOver"
         :isCurrentPlayerTurn="checkIfCurrentPlayerTurn(TURN_VALUE.PLAYER_2)"
         :hasMatchDrew="matchStatus === 'DRAW'"
         :player-info="players[1]" 
@@ -39,9 +40,10 @@ import GameArena from './components/GameArena.vue';
 import PlayerInfoTab from './components/PlayerInfoTab.vue'
 import {TURN_VALUE, MATCH_STATUS, PLAYERS} from './constants/tile';
 import PlayersInfoForm from './components/PlayersInfoForm.vue';
+import DisplayWinner from './components/DisplayWinner.vue';
 export default {
   name: "App",
-  components: {GameArena, PlayerInfoTab, PlayersInfoForm},
+  components: {GameArena, PlayerInfoTab, PlayersInfoForm, DisplayWinner},
   data() {
     return {
       TURN_VALUE,
@@ -51,7 +53,9 @@ export default {
       winner: "",
       newMatchTimer: 4,
       showNewMatchTimer: false,
-      matchNumber: 0
+      matchNumber: 0,
+      finalWinner: null,
+      isGameOver: false
     }
   },
   methods: {
@@ -88,7 +92,6 @@ export default {
     handleUpdateMatchDetails(matchDetails) {
       if (matchDetails.result === MATCH_STATUS.WIN) {
         this.matchStatus = MATCH_STATUS.WIN;
-        this.startNewMatch();
         switch(matchDetails.winner) {
           case PLAYERS.PLAYER_1: 
             this.players[0].score++;
@@ -101,12 +104,17 @@ export default {
             this.winner = PLAYERS.PLAYER_2;
             break;
         }
+        this.startNewMatch();
       } else if (matchDetails.result === MATCH_STATUS.DRAW) {
           this.matchStatus = MATCH_STATUS.DRAW;
           this.startNewMatch();
       }
     },
     startNewMatch() {
+      const checkGameCompletionStatus = this.checkGameCompletionStatus();
+      if (checkGameCompletionStatus) {
+        return;
+      }
       this.showNewMatchTimer = true;
       const timer = setInterval(() => {
         if (this.newMatchTimer === 1) {
@@ -124,6 +132,21 @@ export default {
       this.players.forEach(player => {
         player.hasWon = false;
       })
+    },
+    checkGameCompletionStatus() {
+      const player_1 = this.players[0];
+      const player_2 = this.players[1];
+      console.log('players-', player_1, player_2)
+      if (player_1.score === 6) {
+        this.finalWinner = this.players[0];
+        this.isGameOver = true;
+        return true;
+      } else if (player_2.score === 6) {
+          this.finalWinner = this.players[1];
+          this.isGameOver = true;
+          return true;
+      }
+      return false;
     }
   }
 }
