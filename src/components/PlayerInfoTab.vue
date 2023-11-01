@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col space-y-[15px] items-center">
+  <div class="flex flex-col space-y-[15px] items-center" :class="{' animate__animated animate__tada' : playerInfo.hasWon}">
     <div class="flex flex-col space-y-[25px] items-center">
         <p v-if="showWiningStats" :class="getTabInfoClass">
             {{ getTabInfoText }}
