@@ -10,7 +10,7 @@
         </div>
         <div class="flex flex-col justify-center space-y-2 w-full">
             <p class="text-xs text-white">PLAYER 2</p>
-            <input v-model="player2Name" class="h-12 w-full bg-transparent border border-[#F0F0F0] rounded-[2px] text-white px-3 py-5" type="text" placeholder="Player 1">
+            <input v-model="player2Name" class="h-12 w-full bg-transparent border border-[#F0F0F0] rounded-[2px] text-white px-3 py-5" type="text" placeholder="Player 2">
         </div>
         <button class="btn-class">
             Continue
