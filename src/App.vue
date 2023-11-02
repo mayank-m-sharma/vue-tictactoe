@@ -32,7 +32,7 @@
     </div>
     <p v-if="showNewMatchTimer" class="absolute bottom-5 text-white text-2xl font-bold animate__animated animate__fadeIn animate__infinite">starting new match in ... {{ newMatchTimer }} </p>
     <button v-if="isGameOver" class="absolute bottom-8 px-3 py-2.5 rounded-md bg-[#fcfcfc] border-0" @click="handleNewGamePlay()">
-        Play again ? 
+        Play again
     </button>
   </div>
  </div>
